@@ -1,4 +1,6 @@
 .env
+.env*.local
 
 /internal/database/bkp
 /internal/database/schema
+/json
