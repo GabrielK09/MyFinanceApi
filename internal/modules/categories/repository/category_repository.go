@@ -2,10 +2,13 @@ package categoriesrepository
 
 import (
 	"context"
+	"errors"
+	"my_finance/internal/apperrors"
 	loggerHelper "my_finance/internal/logger"
 	categories_model "my_finance/models/categories"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -100,7 +103,7 @@ func (c *CategoryRepository) Create(ctx context.Context, category categories_mod
 func (c *CategoryRepository) FindById(ctx context.Context, id int) (categories_model.CategoryModel, error) {
 	var category categories_model.CategoryModel
 
-	if err := c.db.QueryRow(
+	err := c.db.QueryRow(
 		ctx,
 		`
 			SELECT 
@@ -125,7 +128,13 @@ func (c *CategoryRepository) FindById(ctx context.Context, id int) (categories_m
 		&category.CreatedAt,
 		&category.UpdatedAt,
 		&category.DeletedAt,
-	); err != nil {
+	)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return categories_model.CategoryModel{}, apperrors.ErrNotFound
+		}
+
 		loggerHelper.ErrorLogger.Println("Erro ao ler os dados da consulta:", err)
 		return categories_model.CategoryModel{}, err
 	}

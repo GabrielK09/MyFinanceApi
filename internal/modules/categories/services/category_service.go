@@ -2,6 +2,7 @@ package categoriesservice
 
 import (
 	"context"
+	"fmt"
 	loggerHelper "my_finance/internal/logger"
 	categories_model "my_finance/models/categories"
 )
@@ -37,6 +38,10 @@ func (s *CategoryService) GetAll(ctx context.Context) ([]categories_model.Catego
 }
 
 func (s *CategoryService) Create(ctx context.Context, category categories_model.CategoryModel) (int, error) {
+	if err := category.Validate(); err != nil {
+		return 0, err
+	}
+
 	categoryId, err := s.repository.Create(ctx, category)
 
 	if err != nil {
@@ -59,6 +64,10 @@ func (s *CategoryService) Update(ctx context.Context, category categories_model.
 }
 
 func (s *CategoryService) FindById(ctx context.Context, id int) (categories_model.CategoryModel, error) {
+	if id <= 0 {
+		return categories_model.CategoryModel{}, fmt.Errorf("O ID da transação precisa ser maior que zero.")
+	}
+
 	category, err := s.repository.FindById(ctx, id)
 
 	if err != nil {
@@ -70,6 +79,10 @@ func (s *CategoryService) FindById(ctx context.Context, id int) (categories_mode
 }
 
 func (s *CategoryService) Delete(ctx context.Context, id int) error {
+	if id <= 0 {
+		return fmt.Errorf("O ID da transação precisa ser maior que zero.")
+	}
+
 	if err := s.repository.Delete(ctx, id); err != nil {
 		loggerHelper.ErrorLogger.Println("Erro ao deletar a categoria:", err)
 		return err
@@ -79,6 +92,10 @@ func (s *CategoryService) Delete(ctx context.Context, id int) error {
 }
 
 func (s *CategoryService) Active(ctx context.Context, id int) error {
+	if id <= 0 {
+		return fmt.Errorf("O ID da transação precisa ser maior que zero.")
+	}
+
 	if err := s.repository.Active(ctx, id); err != nil {
 		loggerHelper.ErrorLogger.Println("Erro ao ativar a categoria:", err)
 		return err
