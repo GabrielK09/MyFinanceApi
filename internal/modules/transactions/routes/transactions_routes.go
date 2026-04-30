@@ -16,7 +16,7 @@ func RegisterTransactionsRoutes(r *http.ServeMux, db *pgxpool.Pool) {
 	controller := transactionscontroller.NewTransactionsController(service)
 
 	r.HandleFunc("GET  /transactions", controller.GetAll)
-	r.HandleFunc("POST /transactions", controller.Create)
 	r.HandleFunc("GET  /transactions/{id}", controller.FindById)
+	r.HandleFunc("POST /transactions", controller.Create)
 
 }
