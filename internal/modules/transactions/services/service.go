@@ -26,7 +26,7 @@ func (s *TransactionsService) GetAll(ctx context.Context) ([]transactions_model.
 	transactions, err := s.repository.GetAll(ctx)
 
 	if err != nil {
-		loggerHelper.ErrorLogger.Println("Erro ao retornar as transações:", err)
+		loggerHelper.ErrorLogger.Println("Erro ao executar o select:", err)
 
 		return []transactions_model.TransactionsModel{}, err
 	}

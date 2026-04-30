@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	categoriesroutes "my_finance/internal/modules/categories/routes"
 	transactionsroutes "my_finance/internal/modules/transactions/routes"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -21,6 +22,8 @@ func StartServer(db *pgxpool.Pool) {
 	}
 
 	transactionsroutes.RegisterTransactionsRoutes(api, db)
+	categoriesroutes.RegisterCategoriesRoutes(api, db)
+
 	r.Handle("/api/", http.StripPrefix("/api", api))
 
 	log.Printf("Servidor rodando em http://localhost:%s/api", port)

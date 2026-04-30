@@ -10,18 +10,18 @@ import (
 // time.Time layout RFC3339
 
 type TransactionsModel struct {
-	Id          int                       `json:"id"`
-	CategoryId  int                       `json:"category_id"`
-	Type        constants.TransactionType `json:"type"`
-	Description string                    `json:"description"`
-	Amount      float64                   `json:"amount"`
-	DueDate     *time.Time                `json:"due_date"`
-	PaidAt      *time.Time                `json:"paid_at"`
-	Status      constants.Status          `json:"status"`
-	Notes       string                    `json:"notes"`
-	CreatedAt   time.Time                 `json:"created_at"`
-	UpdatedAt   time.Time                 `json:"updated_at"`
-	DeletedAt   *time.Time                `json:"deleted_at"`
+	Id          int                    `json:"id"`
+	CategoryId  int                    `json:"category_id"`
+	Type        constants.ConstantType `json:"type"`
+	Description string                 `json:"description"`
+	Amount      float64                `json:"amount"`
+	DueDate     *time.Time             `json:"due_date"`
+	PaidAt      *time.Time             `json:"paid_at"`
+	Status      constants.Status       `json:"status"`
+	Notes       string                 `json:"notes"`
+	CreatedAt   time.Time              `json:"created_at"`
+	UpdatedAt   time.Time              `json:"updated_at"`
+	DeletedAt   *time.Time             `json:"deleted_at"`
 }
 
 func (t TransactionsModel) Validate() error {
@@ -38,7 +38,7 @@ func (t TransactionsModel) Validate() error {
 	}
 
 	if len(t.Description) > 150 {
-		return fmt.Errorf("A descrição é deve ter no máximo 150 caracteres.")
+		return fmt.Errorf("A descrição deve ter no máximo 150 caracteres.")
 	}
 
 	if t.Amount <= 0 {

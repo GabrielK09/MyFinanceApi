@@ -77,7 +77,6 @@ func (r *TransactionsRepository) GetAll(ctx context.Context) ([]transactions_mod
 }
 
 func (r *TransactionsRepository) Create(ctx context.Context, transaction transactions_model.TransactionsModel) (int, error) {
-
 	var transactionId int
 
 	if err := r.db.QueryRow(

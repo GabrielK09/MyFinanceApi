@@ -1,13 +1,13 @@
 package constants
 
-type TransactionType string
+type ConstantType string
 
 const (
-	TypeIncome  TransactionType = "Entrada"
-	TypeExpense TransactionType = "Saída"
+	TypeIncome  ConstantType = "Entrada"
+	TypeExpense ConstantType = "Saída"
 )
 
-func (t TransactionType) IsValidType() bool {
+func (t ConstantType) IsValidType() bool {
 	switch t {
 	case TypeIncome, TypeExpense:
 		return true
