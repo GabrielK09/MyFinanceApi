@@ -3,10 +3,10 @@ package categoriescontroller
 import (
 	"context"
 	"encoding/json"
+	getparamid "my_finance/internal/helpers/get_param_id"
 	"my_finance/internal/response"
 	categories_model "my_finance/models/categories"
 	"net/http"
-	"strconv"
 )
 
 type CategoryService interface {
@@ -75,9 +75,7 @@ func (c *CategoryController) Create(w http.ResponseWriter, r *http.Request) {
 func (c *CategoryController) Update(w http.ResponseWriter, r *http.Request) {
 	var categoryPayLoad categories_model.CategoryModel
 
-	param := r.PathValue("id")
-
-	id, err := strconv.Atoi(param)
+	id, err := getparamid.HandleParamIdUrl(r.PathValue("id"))
 
 	if err != nil {
 		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
@@ -115,9 +113,7 @@ func (c *CategoryController) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *CategoryController) FindById(w http.ResponseWriter, r *http.Request) {
-	param := r.PathValue("id")
-
-	id, err := strconv.Atoi(param)
+	id, err := getparamid.HandleParamIdUrl(r.PathValue("id"))
 
 	if err != nil {
 		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
@@ -138,15 +134,13 @@ func (c *CategoryController) FindById(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response.WriteJSON(w, http.StatusOK, response.SuccessResponse(
-		"Categoria desativada com sucesso!",
+		"Categoria localizada com sucesso!",
 		map[string]any{"category": category},
 	))
 }
 
 func (c *CategoryController) Delete(w http.ResponseWriter, r *http.Request) {
-	param := r.PathValue("id")
-
-	id, err := strconv.Atoi(param)
+	id, err := getparamid.HandleParamIdUrl(r.PathValue("id"))
 
 	if err != nil {
 		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
@@ -171,9 +165,7 @@ func (c *CategoryController) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *CategoryController) Active(w http.ResponseWriter, r *http.Request) {
-	param := r.PathValue("id")
-
-	id, err := strconv.Atoi(param)
+	id, err := getparamid.HandleParamIdUrl(r.PathValue("id"))
 
 	if err != nil {
 		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(

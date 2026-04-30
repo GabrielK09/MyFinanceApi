@@ -3,4 +3,5 @@
 
 /internal/database/bkp
 /internal/database/schema
+/internal/database/sql
 /json

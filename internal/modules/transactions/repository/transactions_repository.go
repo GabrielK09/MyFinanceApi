@@ -2,7 +2,9 @@ package transactionsrepository
 
 import (
 	"context"
+	"time"
 
+	"my_finance/internal/constants"
 	loggerHelper "my_finance/internal/logger"
 	transactions_model "my_finance/models/transactions"
 
@@ -26,6 +28,7 @@ func (r *TransactionsRepository) GetAll(ctx context.Context) ([]transactions_mod
 		ctx,
 		`
 			SELECT
+				id,
 				category_id,
 				type,
 				description,
@@ -39,6 +42,10 @@ func (r *TransactionsRepository) GetAll(ctx context.Context) ([]transactions_mod
 				deleted_at
 			FROM
 				transactions
+			WHERE
+				deleted_at IS NULL
+			ORDER BY
+				id;
 		`,
 	)
 
@@ -54,6 +61,7 @@ func (r *TransactionsRepository) GetAll(ctx context.Context) ([]transactions_mod
 		var transaction transactions_model.TransactionsModel
 
 		if err := transactionsRows.Scan(
+			&transaction.Id,
 			&transaction.CategoryId,
 			&transaction.Type,
 			&transaction.Description,
@@ -111,6 +119,7 @@ func (r *TransactionsRepository) FindById(ctx context.Context, id int) (transact
 		ctx,
 		`
 			SELECT
+				id,
 				category_id,
 				type,
 				description,
@@ -129,6 +138,7 @@ func (r *TransactionsRepository) FindById(ctx context.Context, id int) (transact
 		`,
 		id,
 	).Scan(
+		&transaction.Id,
 		&transaction.CategoryId,
 		&transaction.Type,
 		&transaction.Description,
@@ -146,4 +156,31 @@ func (r *TransactionsRepository) FindById(ctx context.Context, id int) (transact
 	}
 
 	return transaction, nil
+}
+
+func (r *TransactionsRepository) Pay(ctx context.Context, id int, paidAt time.Time) error {
+	if _, err := r.db.Exec(
+		ctx,
+		`
+			UPDATE
+				transactions
+			SET
+				paid_at = $2,
+				status = $3,
+				updated_at = NOW()
+			WHERE
+				id = $1 AND
+				status = 'Pendente' AND
+				paid_at IS NULL AND
+				deleted_at IS NULL
+		`,
+		id,
+		paidAt,
+		constants.StatusPago,
+	); err != nil {
+		loggerHelper.ErrorLogger.Println("Erro ao pagar a transação:", err)
+		return err
+	}
+
+	return nil
 }

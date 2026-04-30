@@ -3,16 +3,21 @@ package transactionscontroller
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"my_finance/internal/apperrors"
+	getparamid "my_finance/internal/helpers/get_param_id"
 	loggerHelper "my_finance/internal/logger"
 	"my_finance/internal/response"
 	transactions_model "my_finance/models/transactions"
 	"net/http"
+	"time"
 )
 
 type TransactionsService interface {
 	GetAll(context.Context) ([]transactions_model.TransactionsModel, error)
 	Create(context.Context, transactions_model.TransactionsModel) (int, error)
 	FindById(context.Context, int) (transactions_model.TransactionsModel, error)
+	Pay(context.Context, int, time.Time) error
 }
 
 type TransactionsController struct {
@@ -58,6 +63,14 @@ func (t *TransactionsController) Create(w http.ResponseWriter, r *http.Request) 
 	transactionId, err := t.service.Create(r.Context(), transaction)
 
 	if err != nil {
+		if errors.Is(err, apperrors.ErrNotFound) {
+			response.WriteJSON(w, http.StatusNotFound, response.ErrorResponse(
+				"Erro ao criar a transação.",
+				map[string]any{"error": err.Error()},
+			))
+			return
+		}
+
 		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
 			"Erro ao criar a transação.",
 			map[string]any{"error": err.Error()},
@@ -72,5 +85,45 @@ func (t *TransactionsController) Create(w http.ResponseWriter, r *http.Request) 
 }
 
 func (t *TransactionsController) FindById(w http.ResponseWriter, r *http.Request) {
+	id, err := getparamid.HandleParamIdUrl(r.PathValue("id"))
 
+	if err != nil {
+		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
+			"Erro ao identificar o parametro da categoria",
+			map[string]any{"error": err.Error()},
+		))
+		return
+	}
+
+	transaction, err := t.service.FindById(r.Context(), id)
+
+	response.WriteJSON(w, http.StatusOK, response.SuccessResponse(
+		"Transação localizada com sucesso!",
+		map[string]any{"transaction": transaction},
+	))
+}
+
+func (t *TransactionsController) Pay(w http.ResponseWriter, r *http.Request) {
+	id, err := getparamid.HandleParamIdUrl(r.PathValue("id"))
+
+	if err != nil {
+		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
+			"Erro ao identificar o parametro da categoria",
+			map[string]any{"error": err.Error()},
+		))
+		return
+	}
+
+	if err := t.service.Pay(r.Context(), id, time.Now()); err != nil {
+		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
+			"Erro ao pagar a transação.",
+			map[string]any{"error": err.Error()},
+		))
+		return
+	}
+
+	response.WriteJSON(w, http.StatusOK, response.SuccessResponse(
+		"Transação paga com sucesso!",
+		map[string]any{},
+	))
 }

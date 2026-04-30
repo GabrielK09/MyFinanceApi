@@ -45,8 +45,8 @@ func (t TransactionsModel) Validate() error {
 		return fmt.Errorf("O valor deve ser maior que zero.")
 	}
 
-	if !t.Status.IsValidStatus() {
-		return fmt.Errorf("O status deve ser entre Pago, Pendente ou Cancelado.")
+	if t.PaidAt != nil && t.Status == constants.StatusPendente {
+		return fmt.Errorf("Uma transação não pode ser possuir o status pendente junto a uma data de pagamento.")
 	}
 
 	return nil
