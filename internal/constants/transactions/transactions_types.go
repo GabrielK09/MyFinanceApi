@@ -1,4 +1,4 @@
-package constants
+package transactionsconstants
 
 type ConstantType string
 

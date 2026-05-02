@@ -31,3 +31,10 @@ func NewUnprocessableEntity(message string) error {
 		err:     ErrUnprocessableEntity,
 	}
 }
+
+func NewErrNotFound(message string) error {
+	return AppError{
+		message: message,
+		err:     ErrNotFound,
+	}
+}

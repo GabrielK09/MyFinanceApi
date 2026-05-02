@@ -204,6 +204,7 @@ func (r *IncomeReceiptsRepository) FindById(ctx context.Context, id int) (*incom
 			return nil, apperrors.ErrNotFound
 		}
 
+		loggerHelper.ErrorLogger.Println("Erro ao localizar o recebimento:", err)
 		return nil, err
 	}
 
