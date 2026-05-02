@@ -12,6 +12,8 @@ import (
 type TransactionsModel struct {
 	Id          int                    `json:"id"`
 	CategoryId  int                    `json:"category_id"`
+	Origin      *string                `json:"origin"`
+	OriginId    *int                   `json:"origin_id"`
 	Type        constants.ConstantType `json:"type"`
 	Description string                 `json:"description"`
 	Amount      float64                `json:"amount"`
