@@ -117,7 +117,8 @@ func (c *CategoryRepository) FindById(ctx context.Context, id int) (categories_m
 			FROM
 				categories
 			WHERE
-				id = $1
+		 		id = $1 AND
+				deleted_at IS NULL
 		`,
 		id,
 	).Scan(
