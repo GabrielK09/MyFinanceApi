@@ -15,6 +15,7 @@ import (
 type IncomeReceiptsService interface {
 	GetAll(context.Context) ([]incomereceiptsmodel.IncomeReceiptsModel, error)
 	Create(context.Context, incomereceiptsmodel.IncomeReceiptsModel) (incomereceiptsmodel.IncomeReceiptsModel, error)
+	FindById(context.Context, int) (*incomereceiptsmodel.IncomeReceiptsModel, error)
 	Cancel(context.Context, int) error
 	Delete(context.Context, int) error
 }
@@ -128,7 +129,10 @@ func (c *IncomeReceiptsController) Cancel(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	response.WriteJSON(w, http.StatusOK, response.SuccessResponse(
+		"Recebimento cancelado com sucesso!.",
+		map[string]any{},
+	))
 }
 
 func (c *IncomeReceiptsController) Delete(w http.ResponseWriter, r *http.Request) {
@@ -159,4 +163,39 @@ func (c *IncomeReceiptsController) Delete(w http.ResponseWriter, r *http.Request
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func (c *IncomeReceiptsController) FindById(w http.ResponseWriter, r *http.Request) {
+	id, err := getparamid.HandleParamIdUrl(r.PathValue("id"))
+
+	if err != nil {
+		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
+			"Erro ao identificar o parametro da categoria",
+			map[string]any{"error": err.Error()},
+		))
+		return
+	}
+
+	incomeReceipt, err := c.service.FindById(r.Context(), id)
+
+	if err != nil {
+		if errors.Is(err, apperrors.ErrNotFound) {
+			response.WriteJSON(w, http.StatusNotFound, response.ErrorResponse(
+				"Recebimento não localizada",
+				map[string]any{"error": err.Error()},
+			))
+			return
+		}
+
+		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
+			"Erro ao localizar o recebimento",
+			map[string]any{"error": err.Error()},
+		))
+		return
+	}
+
+	response.WriteJSON(w, http.StatusOK, response.SuccessResponse(
+		"Transação localizada com sucesso!",
+		map[string]any{"income_receipt": incomeReceipt},
+	))
 }

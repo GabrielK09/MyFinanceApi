@@ -18,6 +18,7 @@ func RegisterIncomeReceiptsRoutes(r *http.ServeMux, db *pgxpool.Pool) {
 	controller := incomereceiptscontroller.NewIncomeReceiptsController(service)
 
 	r.HandleFunc("GET /income-receipts", controller.GetAll)
+	r.HandleFunc("GET /income-receipts/{id}", controller.FindById)
 	r.HandleFunc("POST /income-receipts", controller.Create)
 	r.HandleFunc("PATCH /income-receipts/cancel/{id}", controller.Cancel)
 	r.HandleFunc("DELETE /income-receipts/delete/{id}", controller.Delete)

@@ -241,7 +241,8 @@ func (r *IncomeSourcesRepository) FindIncomeSourceById(ctx context.Context, id i
 				description,
 				active,
 				created_at,
-				updated_at
+				updated_at,
+				deleted_at
 			FROM
 				income_sources
 			WHERE
@@ -256,6 +257,7 @@ func (r *IncomeSourcesRepository) FindIncomeSourceById(ctx context.Context, id i
 		&incomeSource.Active,
 		&incomeSource.CreatedAt,
 		&incomeSource.UpdatedAt,
+		&incomeSource.DeletedAt,
 	)
 
 	if err != nil {
