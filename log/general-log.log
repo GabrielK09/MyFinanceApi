@@ -1,22 +1,2 @@
-Info Logger:	2026/05/02 20:13:54 transactions_service.go:110: Informações de recebimento informados em uma transação manual, vai converter para criação manual
-Error Logger:	2026/05/02 20:13:55 transactions_repository.go:208: Erro ao alterar a transação: no rows in result set
-Error Logger:	2026/05/02 20:13:55 transactions_service.go:137: Erro ao alterar a transação: no rows in result set
-Info Logger:	2026/05/02 20:15:06 conn.go:18: Conectando ao db ...
-Info Logger:	2026/05/02 20:15:10 transactions_service.go:110: Informações de recebimento informados em uma transação manual, vai converter para criação manual
-Error Logger:	2026/05/02 20:15:11 transactions_repository.go:211: Trnsação não localizada: no rows in result set
-Error Logger:	2026/05/02 20:15:11 transactions_service.go:137: Erro ao alterar a transação: registro não encontrado
-Info Logger:	2026/05/02 20:15:17 transactions_service.go:110: Informações de recebimento informados em uma transação manual, vai converter para criação manual
-Info Logger:	2026/05/02 20:22:49 conn.go:18: Conectando ao db ...
-Info Logger:	2026/05/02 20:22:54 transactions_service.go:110: Informações de recebimento informados em uma transação manual, vai converter para criação manual
-Info Logger:	2026/05/02 20:23:04 transactions_service.go:110: Informações de recebimento informados em uma transação manual, vai converter para criação manual
-Error Logger:	2026/05/02 20:23:24 transactions_repository.go:337: Transação não localizada: <nil>
-Error Logger:	2026/05/02 20:23:24 transactions_service.go:242: Erro ao pagar a transação: registro não encontrado
-Error Logger:	2026/05/02 20:23:36 transactions_repository.go:337: Transação não localizada: <nil>
-Error Logger:	2026/05/02 20:23:36 transactions_service.go:242: Erro ao pagar a transação: registro não encontrado
-Error Logger:	2026/05/02 20:23:55 transactions_repository.go:337: Transação não localizada: <nil>
-Error Logger:	2026/05/02 20:23:55 transactions_service.go:242: Erro ao pagar a transação: registro não encontrado
-Error Logger:	2026/05/02 20:25:47 transactions_repository.go:269: Trnsação não localizada: no rows in result set
-Error Logger:	2026/05/02 20:25:47 transactions_service.go:162: Transação 1 não localizada.
-Error Logger:	2026/05/02 20:25:47 transactions_service.go:182: Transação 1 não localizada.
-Info Logger:	2026/05/02 20:25:59 transactions_service.go:110: Informações de recebimento informados em uma transação manual, vai converter para criação manual
-Info Logger:	2026/05/02 20:26:11 transactions_service.go:110: Informações de recebimento informados em uma transação manual, vai converter para criação manual
+Error Logger:	2026/05/03 02:14:48 income_sources_repository.go:264: Erro ao localziar os dados da fonte de renda: no rows in result set
+Error Logger:	2026/05/03 02:14:53 income_sources_repository.go:264: Erro ao localziar os dados da fonte de renda: no rows in result set

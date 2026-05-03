@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"my_finance/internal/apperrors"
+	incomereceiptssconstants "my_finance/internal/constants/income_receipts"
 	loggerHelper "my_finance/internal/logger"
 	incomereceiptsmodel "my_finance/models/income_receipts"
 	incomesourcesmodel "my_finance/models/income_sources"
@@ -73,7 +74,34 @@ func (s *IncomeReceiptsService) Create(ctx context.Context, incomeReceipts incom
 }
 
 func (s *IncomeReceiptsService) Cancel(ctx context.Context, id int) error {
-	return s.repository.Cancel(ctx, id)
+	incomeReceipt, err := s.repository.FindById(ctx, id)
+
+	if err != nil {
+		if errors.Is(err, apperrors.ErrNotFound) {
+			loggerHelper.ErrorLogger.Printf("Recebimento %d não localizada.", id)
+
+			return apperrors.NewErrNotFound(fmt.Sprintf("Recebimento %d não localizada.", id))
+
+		}
+
+		loggerHelper.ErrorLogger.Println("Erro ao localizar o recebimento:", err)
+		return err
+	}
+
+	if incomeReceipt.Status == incomereceiptssconstants.StatusCancelado {
+		return fmt.Errorf("Recebimento %d já cancelado.", id)
+	}
+
+	if incomeReceipt.DeletedAt != nil {
+		return fmt.Errorf("Recebimento %d deletado.", id)
+	}
+
+	if err := s.repository.Cancel(ctx, id); err != nil {
+		loggerHelper.ErrorLogger.Println("Erro ao cancelar o recebimento:", err)
+		return err
+	}
+
+	return nil
 }
 
 func (s *IncomeReceiptsService) Delete(ctx context.Context, id int) error {
@@ -90,4 +118,22 @@ func (s *IncomeReceiptsService) Delete(ctx context.Context, id int) error {
 	}
 
 	return s.repository.Delete(ctx, id)
+}
+
+func (s *IncomeReceiptsService) FindById(ctx context.Context, id int) (*incomereceiptsmodel.IncomeReceiptsModel, error) {
+	incomeReceipt, err := s.repository.FindById(ctx, id)
+
+	if err != nil {
+		if errors.Is(err, apperrors.ErrNotFound) {
+			loggerHelper.ErrorLogger.Printf("Recebimento %d não localizada.", id)
+
+			return nil, apperrors.NewErrNotFound(fmt.Sprintf("Recebimento %d não localizada.", id))
+
+		}
+
+		loggerHelper.ErrorLogger.Println("Erro ao localizar o recebimento:", err)
+		return nil, err
+	}
+
+	return incomeReceipt, nil
 }
