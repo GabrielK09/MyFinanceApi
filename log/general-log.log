@@ -1,2 +1,25 @@
 Error Logger:	2026/05/03 02:14:48 income_sources_repository.go:264: Erro ao localziar os dados da fonte de renda: no rows in result set
 Error Logger:	2026/05/03 02:14:53 income_sources_repository.go:264: Erro ao localziar os dados da fonte de renda: no rows in result set
+Info Logger:	2026/05/03 02:33:04 conn.go:18: Conectando ao db ...
+Info Logger:	2026/05/03 02:33:06 main.go:48: Categoria já cadastrada.
+Info Logger:	2026/05/03 02:33:06 main.go:68: Banco de dados conectado com sucesso!
+Info Logger:	2026/05/03 02:34:40 income_sources_controller.go:193: Dados: {1 Salário Valores recebidos pelo salário false 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC <nil>}
+Error Logger:	2026/05/03 02:34:41 income_sources_repository.go:178: Erro ao altera os dados da fonte de renda: no rows in result set
+Error Logger:	2026/05/03 02:34:41 income_sources_services.go:86: Erro ao alterar a fonte de renda: no rows in result set
+Info Logger:	2026/05/03 02:45:25 conn.go:18: Conectando ao db ...
+Info Logger:	2026/05/03 02:45:26 main.go:48: Categoria já cadastrada.
+Info Logger:	2026/05/03 02:45:26 main.go:68: Banco de dados conectado com sucesso!
+Error Logger:	2026/05/03 02:45:28 income_sources_repository.go:264: Erro ao localziar os dados da fonte de renda: no rows in result set
+Error Logger:	2026/05/03 02:45:28 income_sources_services.go:47: Fonte de renda 1 não localizada.
+Info Logger:	2026/05/03 02:46:42 conn.go:18: Conectando ao db ...
+Info Logger:	2026/05/03 02:46:43 main.go:48: Categoria já cadastrada.
+Info Logger:	2026/05/03 02:46:43 main.go:68: Banco de dados conectado com sucesso!
+Info Logger:	2026/05/03 02:52:16 conn.go:18: Conectando ao db ...
+Info Logger:	2026/05/03 02:52:17 main.go:48: Categoria já cadastrada.
+Info Logger:	2026/05/03 02:52:17 main.go:68: Banco de dados conectado com sucesso!
+Error Logger:	2026/05/03 02:52:20 income_sources_repository.go:263: Erro ao localziar os dados da fonte de renda: no rows in result set
+Error Logger:	2026/05/03 02:52:20 income_sources_services.go:47: Fonte de renda 3 não localizada.
+Error Logger:	2026/05/03 02:52:23 income_sources_repository.go:263: Erro ao localziar os dados da fonte de renda: no rows in result set
+Error Logger:	2026/05/03 02:52:23 income_sources_services.go:47: Fonte de renda 2 não localizada.
+Error Logger:	2026/05/03 02:52:41 income_sources_repository.go:263: Erro ao localziar os dados da fonte de renda: no rows in result set
+Error Logger:	2026/05/03 02:52:41 income_sources_services.go:47: Fonte de renda 12 não localizada.

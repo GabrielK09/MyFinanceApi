@@ -20,7 +20,7 @@ type IncomeReceiptsRepository interface {
 }
 
 type IncomeSourcesRepository interface {
-	FindIncomeSourceById(ctx context.Context, id int) (*incomesourcesmodel.IncomeSourcesModel, error)
+	FindById(ctx context.Context, id int) (*incomesourcesmodel.IncomeSourcesModel, error)
 }
 
 type IncomeReceiptsService struct {
@@ -52,7 +52,7 @@ func (s *IncomeReceiptsService) Create(ctx context.Context, incomeReceipts incom
 		return incomereceiptsmodel.IncomeReceiptsModel{}, err
 	}
 
-	_, err := s.incomeSourcesRepository.FindIncomeSourceById(ctx, incomeReceipts.IncomeSourceId)
+	_, err := s.incomeSourcesRepository.FindById(ctx, incomeReceipts.IncomeSourceId)
 
 	if err != nil {
 		if errors.Is(err, apperrors.ErrNotFound) {

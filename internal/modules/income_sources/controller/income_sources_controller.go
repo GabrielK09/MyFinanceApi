@@ -15,6 +15,7 @@ import (
 
 type IncomeSourcesService interface {
 	GetAll(context.Context) ([]incomesourcesmodel.IncomeSourcesModel, error)
+	FindById(context.Context, int) (*incomesourcesmodel.IncomeSourcesModel, error)
 	Create(context.Context, incomesourcesmodel.IncomeSourcesModel) (incomesourcesmodel.IncomeSourcesModel, error)
 	Update(context.Context, incomesourcesmodel.IncomeSourcesModel) (incomesourcesmodel.IncomeSourcesModel, error)
 	Delete(context.Context, int) error
@@ -45,6 +46,43 @@ func (c *IncomeSourcesController) GetAll(w http.ResponseWriter, r *http.Request)
 	response.WriteJSON(w, http.StatusOK, response.SuccessResponse(
 		"Todas as fontes de renda",
 		map[string]any{"income_sources": incomeSources},
+	))
+}
+
+func (c *IncomeSourcesController) FindById(w http.ResponseWriter, r *http.Request) {
+	id, err := getparamid.HandleParamIdUrl(r.PathValue("id"))
+
+	if err != nil {
+		loggerHelper.ErrorLogger.Println("Erro ao identificar o parametro da fonte de renda", err)
+
+		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
+			"Erro ao identificar o parametro da fonte de renda",
+			map[string]any{"error": err.Error()},
+		))
+		return
+	}
+
+	incomeSource, err := c.service.FindById(r.Context(), id)
+
+	if err != nil {
+		if errors.Is(err, apperrors.ErrNotFound) {
+			response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
+				"Fonte de renda não localizada.",
+				map[string]any{"error": err.Error()},
+			))
+			return
+		}
+
+		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
+			"Erro ao identificar o parametro da fonte de renda",
+			map[string]any{"error": err.Error()},
+		))
+		return
+	}
+
+	response.WriteJSON(w, http.StatusOK, response.SuccessResponse(
+		"Todas as fontes de renda",
+		map[string]any{"income_source": incomeSource},
 	))
 }
 
@@ -151,9 +189,6 @@ func (c *IncomeSourcesController) Update(w http.ResponseWriter, r *http.Request)
 	}
 
 	payLoad.Id = id
-
-	loggerHelper.InfoLogger.Println("Dados:", payLoad)
-
 	updated, err := c.service.Update(r.Context(), payLoad)
 
 	if err != nil {
@@ -181,7 +216,17 @@ func (c *IncomeSourcesController) Delete(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	if err := c.service.Delete(r.Context(), id); err != nil {
+	err = c.service.Delete(r.Context(), id)
+
+	if err != nil {
+		if errors.Is(err, apperrors.ErrNotFound) {
+			response.WriteJSON(w, http.StatusNotFound, response.ErrorResponse(
+				"Fonte de renda não localizada.",
+				map[string]any{"error": err.Error()},
+			))
+			return
+		}
+
 		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
 			"Erro ao desativar a fonte de renda",
 			map[string]any{"error": err.Error()},
@@ -203,7 +248,17 @@ func (c *IncomeSourcesController) Active(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	if err := c.service.Active(r.Context(), id); err != nil {
+	err = c.service.Active(r.Context(), id)
+
+	if err != nil {
+		if errors.Is(err, apperrors.ErrNotFound) {
+			response.WriteJSON(w, http.StatusNotFound, response.ErrorResponse(
+				"Fonte de renda não localizada.",
+				map[string]any{"error": err.Error()},
+			))
+			return
+		}
+
 		response.WriteJSON(w, http.StatusBadRequest, response.ErrorResponse(
 			"Erro ao ativar a fonte de renda",
 			map[string]any{"error": err.Error()},

@@ -229,7 +229,7 @@ func (r *IncomeSourcesRepository) Active(ctx context.Context, id int) error {
 	return nil
 }
 
-func (r *IncomeSourcesRepository) FindIncomeSourceById(ctx context.Context, id int) (*incomesourcesmodel.IncomeSourcesModel, error) {
+func (r *IncomeSourcesRepository) FindById(ctx context.Context, id int) (*incomesourcesmodel.IncomeSourcesModel, error) {
 	var incomeSource incomesourcesmodel.IncomeSourcesModel
 
 	err := r.db.QueryRow(
@@ -246,8 +246,7 @@ func (r *IncomeSourcesRepository) FindIncomeSourceById(ctx context.Context, id i
 			FROM
 				income_sources
 			WHERE
-				id = $1 AND
-				deleted_at IS NULL
+				id = $1
 		`,
 		id,
 	).Scan(
